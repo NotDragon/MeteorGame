@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { createClient } from '@supabase/supabase-js';
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { dev } from '$app/environment';
 
 interface MeteorEntry {
@@ -22,9 +22,19 @@ interface SupabaseEntry {
 }
 
 // Initialize Supabase client
-const supabase = dev && (!SUPABASE_URL || !SUPABASE_ANON_KEY)
-	? null
-	: createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Only create client if we have valid credentials
+let supabase: ReturnType<typeof createClient> | null = null;
+
+if (env.SUPABASE_URL && env.SUPABASE_ANON_KEY) {
+	try {
+		supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
+	} catch (error) {
+		console.error('Failed to initialize Supabase client:', error);
+		supabase = null;
+	}
+} else if (!dev) {
+	console.warn('Supabase credentials not found in environment variables');
+}
 
 // In-memory storage for development without Supabase
 let devEntries: MeteorEntry[] = [];
@@ -61,7 +71,7 @@ async function readEntries(): Promise<MeteorEntry[]> {
 		const { data, error } = await supabase
 			.from('meteor_entries')
 			.select('*')
-			.order('rate_per_hour', { ascending: false });
+			.order('rate_per_hour', { ascending: false }) as { data: SupabaseEntry[] | null; error: any };
 		
 		if (error) {
 			console.error('Error reading entries from Supabase:', error);
@@ -91,7 +101,7 @@ async function saveEntry(entry: Omit<MeteorEntry, 'id'>): Promise<MeteorEntry | 
 			.from('meteor_entries')
 			.insert(toSupabaseEntry(entry))
 			.select()
-			.single();
+			.single() as { data: SupabaseEntry | null; error: any };
 		
 		if (error) {
 			console.error('Error saving entry to Supabase:', error);
