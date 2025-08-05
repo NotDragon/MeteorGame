@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types';
 import { createClient } from '@supabase/supabase-js';
-import { env } from '$env/dynamic/private';
+import { SUPABASE_URL,  SUPABASE_ANON_KEY } from '$env/static/private';
 import { dev } from '$app/environment';
 
 interface MeteorEntry {
@@ -25,9 +25,9 @@ interface SupabaseEntry {
 // Only create client if we have valid credentials
 let supabase: ReturnType<typeof createClient> | null = null;
 
-if (env.SUPABASE_URL && env.SUPABASE_ANON_KEY) {
+if (SUPABASE_URL && SUPABASE_ANON_KEY) {
 	try {
-		supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
+		supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 	} catch (error) {
 		console.error('Failed to initialize Supabase client:', error);
 		supabase = null;

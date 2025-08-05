@@ -1,38 +1,58 @@
-# sv
+# 🌠 Meteor Counter
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern, interactive meteor sighting tracker with leaderboard functionality.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Observation Form**: Record your name, meteor count, and observation time
+- **Smart Leaderboard**: Automatically sorted by meteors per hour rate
+- **Color-Coded Results**: Green for above-average rates, red for below-average
+- **Special Entries**: Shows expected rate (60/hr) and calculated average
+- **Search & Filter**: Find specific observers
+- **Responsive Design**: Works on desktop and mobile
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Quick Start
 
-# create a new project in my-app
-npx sv create my-app
-```
+1. **Local Development**:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-## Developing
+2. **With Supabase** (for persistent data):
+   - Create a [Supabase](https://supabase.com) project
+   - Run the SQL from `supabase/schema.sql` in your Supabase SQL editor
+   - Copy `.env.example` to `.env.local` and add your credentials
+   - Restart the dev server
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Deployment
 
-```sh
-npm run dev
+### Vercel (Recommended)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+1. Push to GitHub
+2. Import project in Vercel Dashboard
+3. Add environment variables:
+   - `SUPABASE_URL` - Your Supabase project URL
+   - `SUPABASE_ANON_KEY` - Your Supabase anon key
+4. Deploy
 
-## Building
+### Other Platforms
 
-To create a production version of your app:
+Works on any platform that supports SvelteKit. Just add the same environment variables.
 
-```sh
-npm run build
-```
+## How It Works
 
-You can preview the production build with `npm run preview`.
+1. Enter your observation details in the form
+2. Your rate is calculated automatically (meteors/hour)
+3. Results are sorted by rate with color coding:
+   - 🟢 **Green**: Above average performance
+   - 🔴 **Red**: Below average performance
+   - ⭐ **Gold**: Expected rate (60/hr)
+   - 🔵 **Blue**: Average of all observations
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Tech Stack
+
+- **Frontend**: SvelteKit + TypeScript
+- **Database**: Supabase (PostgreSQL)
+- **Styling**: CSS with glassmorphism effects
+- **Deployment**: Vercel (or any SvelteKit-compatible platform)
