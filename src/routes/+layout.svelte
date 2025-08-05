@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="https://www.thecyprusplanetarium.com/storage/front/images/logo.png" />
+	<link rel="icon" href="https://www.thecyprusplanetarium.com/storage/front/images/favicon.png" />
 </svelte:head>
 
 {@render children?.()}
